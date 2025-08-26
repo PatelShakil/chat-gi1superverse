@@ -13,18 +13,28 @@ const storiesRoutes = require('./routes/stories');
 
 const app = express();
 const server = http.createServer(app);
+
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',
+    'https://chat.gi1superverse.com',
+    'https://chat-api.gi1superverse.com',
+    'https://api.gi1superverse.com'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+
 const io = new Server(server, {
-  cors: {
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST'],
-  },
+  cors: corsOptions
 });
 
 // Connect to MongoDB
 connectDB();
 
 // Middleware
-app.use(cors());
 app.use(express.json());
 
 // Routes
